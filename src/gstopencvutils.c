@@ -26,6 +26,7 @@ gst_opencv_get_ipl_depth_and_channels (GstStructure * structure,
     gint * ipldepth, gint * channels, GError ** err)
 {
   gint depth, bpp;
+  gboolean signed_channel;
 
   if (!gst_structure_get_int (structure, "depth", &depth) ||
       !gst_structure_get_int (structure, "bpp", &bpp)) {
@@ -41,7 +42,13 @@ gst_opencv_get_ipl_depth_and_channels (GstStructure * structure,
   }
 
   if (gst_structure_has_name (structure, "video/x-raw-rgb")) {
-    *channels = 3;
+    if (depth == 24)
+      *channels = 3;
+    else if (depth == 32)
+      *channels = 4;
+    else
+      g_set_error (err, GST_CORE_ERROR, GST_CORE_ERROR_NEGOTIATION,
+          "Unsupported caps %s", gst_structure_get_name (structure));
   } else if (gst_structure_has_name (structure, "video/x-raw-gray")) {
     *channels = 1;
   } else {
@@ -50,11 +57,19 @@ gst_opencv_get_ipl_depth_and_channels (GstStructure * structure,
     return FALSE;
   }
 
+  if (!gst_structure_get_boolean (structure, "signed", &signed_channel))
+    signed_channel = FALSE;
+
   if (depth / *channels == 8) {
-    /* TODO signdness? */
-    *ipldepth = IPL_DEPTH_8U;
+    if (signed_channel)
+      *ipldepth = IPL_DEPTH_8S;
+    else
+      *ipldepth = IPL_DEPTH_8U;
   } else if (depth / *channels == 16) {
-    *ipldepth = IPL_DEPTH_16U;
+    if (signed_channel)
+      *ipldepth = IPL_DEPTH_16S;
+    else
+      *ipldepth = IPL_DEPTH_16U;
   } else {
     g_set_error (err, GST_CORE_ERROR, GST_CORE_ERROR_NEGOTIATION,
         "Unsupported depth/channels %d/%d", depth, *channels);
