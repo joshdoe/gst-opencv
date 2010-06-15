@@ -1,20 +1,24 @@
 set (SOURCES
-    gstcvdilateerode.c
-    gstcvdilate.c
-    gstcvequalizehist.c
-	gstcverode.c
-    gstcvlaplace.c
-	gstcvsmooth.c
-    gstcvsobel.c)
+  gstcvdilateerode.c
+  gstcvdilate.c
+  gstcvequalizehist.c
+  gstcverode.c
+  gstcvfilter2d.c
+  gstcvlaplace.c
+  gstcvresize.c
+  gstcvsmooth.c
+  gstcvsobel.c)
     
 set (noinst_HEADERS
-	gstcvdilateerode.h
-	gstcvdilate.h
-	gstcvequalizehist.h
-	gstcverode.h
-	gstcvlaplace.h
-	gstcvsmooth.h
-	gstcvsobel.h)
+  gstcvdilateerode.h
+  gstcvdilate.h
+  gstcvequalizehist.h
+  gstcverode.h
+  gstcvfilter2d.h
+  gstcvlaplace.h
+  gstcvresize.h
+  gstcvsmooth.h
+  gstcvsobel.h)
 
 include_directories (AFTER ..)
 

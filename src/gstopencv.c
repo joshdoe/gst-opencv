@@ -26,6 +26,7 @@
 #include "gstcvdilate.h"
 #include "gstcvequalizehist.h"
 #include "gstcverode.h"
+#include "gstcvfilter2d.h"
 #include "gstcvlaplace.h"
 #include "gstcvsmooth.h"
 #include "gstcvsobel.h"
@@ -33,6 +34,7 @@
 #include "gstfaceblur.h"
 #include "gstfacedetect.h"
 #include "gstpyramidsegment.h"
+#include "gstcvresize.h"
 #include "gsttemplatematch.h"
 #include "gsttextwrite.h"
 
@@ -48,7 +50,13 @@ plugin_init (GstPlugin * plugin)
   if (!gst_cv_erode_plugin_init (plugin))
     return FALSE;
 
+  if (!gst_cv_filter2d_plugin_init (plugin))
+    return FALSE;
+
   if (!gst_cv_laplace_plugin_init (plugin))
+    return FALSE;
+
+  if (!gst_cv_resize_plugin_init (plugin))
     return FALSE;
 
   if (!gst_cv_smooth_plugin_init (plugin))
