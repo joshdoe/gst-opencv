@@ -47,24 +47,11 @@
 
 #include <gst/gst.h>
 
+#include "gstopencvutils.h"
 #include "gstcvsmooth.h"
 
 GST_DEBUG_CATEGORY_STATIC (gst_cv_smooth_debug);
 #define GST_CAT_DEFAULT gst_cv_smooth_debug
-
-static GstStaticPadTemplate sink_factory = GST_STATIC_PAD_TEMPLATE ("sink",
-    GST_PAD_SINK,
-    GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("video/x-raw-rgb, depth=(int)24, bpp=(int)24;"
-        "video/x-raw-gray, depth=(int)8, bpp=(int)8")
-    );
-
-static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
-    GST_PAD_SRC,
-    GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("video/x-raw-rgb, depth=(int)24, bpp=(int)24;"
-        "video/x-raw-gray, depth=(int)8, bpp=(int)8")
-    );
 
 /* Filter signals and args */
 enum
@@ -147,11 +134,6 @@ gst_cv_smooth_base_init (gpointer gclass)
 {
   GstElementClass *element_class = GST_ELEMENT_CLASS (gclass);
 
-  gst_element_class_add_pad_template (element_class,
-      gst_static_pad_template_get (&src_factory));
-  gst_element_class_add_pad_template (element_class,
-      gst_static_pad_template_get (&sink_factory));
-
   gst_element_class_set_details_simple (element_class,
       "cvsmooth",
       "Transform/Effect/Video",
@@ -166,6 +148,8 @@ gst_cv_smooth_class_init (GstCvSmoothClass * klass)
   GObjectClass *gobject_class;
   GstOpencvBaseTransformClass *gstopencvbasefilter_class;
   GstElementClass *gstelement_class;
+  GstCaps * caps;
+  GstPadTemplate * templ;
 
   gobject_class = (GObjectClass *) klass;
   gstelement_class = (GstElementClass *) klass;
@@ -176,6 +160,15 @@ gst_cv_smooth_class_init (GstCvSmoothClass * klass)
   gobject_class->finalize = GST_DEBUG_FUNCPTR (gst_cv_smooth_finalize);
   gobject_class->set_property = gst_cv_smooth_set_property;
   gobject_class->get_property = gst_cv_smooth_get_property;
+
+  /* add sink and source pad templates */
+  caps = gst_opencv_caps_from_cv_image_type (CV_8UC1);
+  gst_caps_append (caps, gst_opencv_caps_from_cv_image_type (CV_8UC3));
+  templ = gst_pad_template_new ("sink", GST_PAD_SINK, GST_PAD_ALWAYS,
+      gst_caps_ref (caps));
+  gst_element_class_add_pad_template (gstelement_class, templ);
+  templ = gst_pad_template_new ("src", GST_PAD_SRC, GST_PAD_ALWAYS, caps);
+  gst_element_class_add_pad_template (gstelement_class, templ);
 
   gstopencvbasefilter_class->cv_trans_ip_func = gst_cv_smooth_transform_ip;
   gstopencvbasefilter_class->cv_trans_func = gst_cv_smooth_transform;
@@ -221,7 +214,7 @@ gst_cv_smooth_class_init (GstCvSmoothClass * klass)
 
 /* initialize the new element
  * instantiate pads and add them to element
- * set pad calback functions
+ * set pad callback functions
  * initialize instance structure
  */
 static void
