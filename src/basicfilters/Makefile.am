@@ -5,6 +5,7 @@ libgstbasicfilters_la_SOURCES = \
     gstcvabsdiffs.c \
     gstcvadds.c \
     gstcvands.c \
+    gstcvcmps.c \
     gstcvdilateerode.c \
     gstcvdilate.c \
     gstcverode.c \
@@ -25,7 +26,8 @@ libgstbasicfilters_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
 noinst_HEADERS = 
   gstcvabsdiffs.h \
   gstcvadds.h \
-  gstands.h \
+  gstcvands.h \
+  gstcvcmps.h \
   gstcvdilateerode.h \
   gstcvdilate.h \
   gstcvequalizehist.h \
