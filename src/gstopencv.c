@@ -25,6 +25,7 @@
 
 #include "gstcvabsdiffs.h"
 #include "gstcvadds.h"
+#include "gstcvands.h"
 #include "gstcvdilate.h"
 #include "gstcvequalizehist.h"
 #include "gstcverode.h"
@@ -47,6 +48,9 @@ plugin_init (GstPlugin * plugin)
     return FALSE;
 
   if (!gst_cv_adds_plugin_init (plugin))
+    return FALSE;
+
+  if (!gst_cv_ands_plugin_init (plugin))
     return FALSE;
 
   if (!gst_cv_dilate_plugin_init (plugin))
