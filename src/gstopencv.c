@@ -23,6 +23,7 @@
 #include "config.h"
 #endif
 
+#include "gstcvadds.h"
 #include "gstcvdilate.h"
 #include "gstcvequalizehist.h"
 #include "gstcverode.h"
@@ -41,6 +42,9 @@
 static gboolean
 plugin_init (GstPlugin * plugin)
 {
+  if (!gst_cv_adds_plugin_init (plugin))
+    return FALSE;
+
   if (!gst_cv_dilate_plugin_init (plugin))
     return FALSE;
 

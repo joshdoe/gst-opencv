@@ -1,4 +1,5 @@
 set (SOURCES
+  gstcvadds.c
   gstcvdilateerode.c
   gstcvdilate.c
   gstcvequalizehist.c
@@ -10,6 +11,7 @@ set (SOURCES
   gstcvsobel.c)
     
 set (noinst_HEADERS
+  gstcvadds.h
   gstcvdilateerode.h
   gstcvdilate.h
   gstcvequalizehist.h
