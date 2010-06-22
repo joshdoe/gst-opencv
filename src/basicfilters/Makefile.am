@@ -2,6 +2,7 @@ noinst_LTLIBRARIES = libgstbasicfilters.la
 
 # sources used to compile this plug-in
 libgstbasicfilters_la_SOURCES = \
+    gstcvabsdiffs.c \
     gstcvadds.c \
     gstcvdilateerode.c \
     gstcvdilate.c \
@@ -21,6 +22,7 @@ libgstbasicfilters_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
 
 # headers we need but don't want installed
 noinst_HEADERS = 
+  gstcvabsdiffs.h \
   gstcvadds.h \
   gstcvdilateerode.h \
   gstcvdilate.h \
