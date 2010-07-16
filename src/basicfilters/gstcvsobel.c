@@ -188,7 +188,10 @@ gst_cv_sobel_transform_caps (GstBaseTransform * trans, GstPadDirection dir,
         structure = gst_caps_get_structure (output, i);
         gst_structure_set (structure,
             "depth", G_TYPE_INT, 16,
-            "bpp", G_TYPE_INT, 16, "endianness", G_TYPE_INT, 4321, NULL);
+            "bpp", G_TYPE_INT, 16,
+            "signed", G_TYPE_BOOLEAN, TRUE,
+            "endianness", G_TYPE_INT, 4321,
+            NULL);
       }
       break;
     case GST_PAD_SRC:
@@ -197,6 +200,7 @@ gst_cv_sobel_transform_caps (GstBaseTransform * trans, GstPadDirection dir,
         gst_structure_set (structure,
             "depth", G_TYPE_INT, 8, "bpp", G_TYPE_INT, 8, NULL);
         gst_structure_remove_field (structure, "endianness");
+        gst_structure_remove_field (structure, "signed");
       }
       break;
     default:

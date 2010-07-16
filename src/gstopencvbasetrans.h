@@ -72,9 +72,9 @@ typedef GstFlowReturn (*GstOpencvBaseTransformTransformFunc)
     GstBuffer * outbuf, IplImage * outimg);
 
 typedef gboolean (*GstOpencvBaseTransformSetCaps)
-    (GstOpencvBaseTransform * transform, gint in_width, gint in_height,
-    gint in_depth, gint in_channels, gint out_width, gint out_height,
-    gint out_depth, gint out_channels);
+    (GstOpencvBaseTransform * transform, GstCaps * in_caps, gint in_width,
+    gint in_height, gint in_depth, gint in_channels, GstCaps * out_caps,
+    gint out_width, gint out_height, gint out_depth, gint out_channels);
 
 struct _GstOpencvBaseTransform
 {

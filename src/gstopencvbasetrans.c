@@ -176,6 +176,8 @@ gst_opencv_base_transform_transform (GstBaseTransform * trans,
   transform = GST_OPENCV_BASE_TRANSFORM (trans);
   fclass = GST_OPENCV_BASE_TRANSFORM_GET_CLASS (transform);
 
+  GST_DEBUG ("Transforming input buffer to output buffer");
+
   g_return_val_if_fail (fclass->cv_trans_func != NULL, GST_FLOW_ERROR);
   g_return_val_if_fail (transform->cvImage != NULL, GST_FLOW_ERROR);
   g_return_val_if_fail (transform->out_cvImage != NULL, GST_FLOW_ERROR);
@@ -230,6 +232,9 @@ gst_opencv_base_transform_set_caps (GstBaseTransform * trans, GstCaps * incaps,
     return FALSE;
   }
 
+  GST_DEBUG ("Successfully parsed incaps: width=%d, height=%d, depth=%d, channels=%d",
+      in_width, in_height, in_depth, in_channels);
+
   if (!gst_opencv_parse_iplimage_params_from_caps (outcaps, &out_width,
           &out_height, &out_depth, &out_channels, &out_err)) {
     GST_WARNING_OBJECT (transform, "Failed to parse output caps: %s",
@@ -238,9 +243,12 @@ gst_opencv_base_transform_set_caps (GstBaseTransform * trans, GstCaps * incaps,
     return FALSE;
   }
 
+  GST_DEBUG ("Successfully parsed outcaps: width=%d, height=%d, depth=%d, channels=%d",
+    out_width, out_height, out_depth, out_channels);
+
   if (klass->cv_set_caps) {
-    if (!klass->cv_set_caps(transform, in_width, in_height, in_depth,
-        in_channels, out_width, out_height, out_depth, out_channels))
+    if (!klass->cv_set_caps(transform, incaps, in_width, in_height, in_depth,
+        in_channels, outcaps, out_width, out_height, out_depth, out_channels))
       return FALSE;
   }
 

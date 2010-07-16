@@ -94,8 +94,9 @@ static GstFlowReturn gst_cv_laplace_transform (GstOpencvBaseTransform * filter,
     GstBuffer * buf, IplImage * img, GstBuffer * outbuf, IplImage * outimg);
 
 static gboolean gst_cv_laplace_cv_set_caps (GstOpencvBaseTransform * trans,
-    gint in_width, gint in_height, gint in_depth, gint in_channels,
-    gint out_width, gint out_height, gint out_depth, gint out_channels);
+    GstCaps * in_caps, gint in_width, gint in_height, gint in_depth,
+    gint in_channels, GstCaps * out_caps, gint out_width, gint out_height,
+    gint out_depth, gint out_channels);
 
 /* Clean up */
 static void
@@ -168,9 +169,10 @@ gst_cv_laplace_init (GstCvLaplace * filter, GstCvLaplaceClass * gclass)
 }
 
 static gboolean
-gst_cv_laplace_cv_set_caps (GstOpencvBaseTransform * trans, gint in_width,
-    gint in_height, gint in_depth, gint in_channels, gint out_width,
-    gint out_height, gint out_depth, gint out_channels)
+gst_cv_laplace_cv_set_caps (GstOpencvBaseTransform * trans,
+    GstCaps * in_caps, gint in_width, gint in_height, gint in_depth,
+    gint in_channels, GstCaps * out_caps, gint out_width, gint out_height,
+    gint out_depth, gint out_channels)
 {
   GstCvLaplace *filter = GST_CV_LAPLACE (trans);
   gint intermediary_depth;
