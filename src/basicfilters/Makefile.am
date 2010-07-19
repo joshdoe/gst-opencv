@@ -18,12 +18,14 @@ libgstbasicfilters_la_SOURCES = \
 
 # flags used to compile this pyramidsegment
 # add other _CFLAGS and _LIBS as needed
-libgstbasicfilters_la_CFLAGS = $(GST_CFLAGS) $(OPENCV_CFLAGS) -I..
-libgstbasicfilters_la_LIBADD = $(GST_LIBS) $(OPENCV_LIBS)
+libgstbasicfilters_la_CFLAGS = $(GST_CFLAGS) $(GSTPB_BASE_CFLAGS) \
+	$(OPENCV_CFLAGS) -I..
+libgstbasicfilters_la_LIBADD = $(GST_LIBS) $(OPENCV_LIBS) \
+	-lgstvideo-$(GST_MAJORMINOR)
 libgstbasicfilters_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
 
 # headers we need but don't want installed
-noinst_HEADERS = 
+noinst_HEADERS = \
   gstcvabsdiffs.h \
   gstcvadds.h \
   gstcvands.h \

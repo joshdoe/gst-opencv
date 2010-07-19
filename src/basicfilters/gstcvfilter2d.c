@@ -94,8 +94,10 @@ static void gst_cv_filter2d_set_property (GObject * object, guint prop_id,
 static void gst_cv_filter2d_get_property (GObject * object, guint prop_id,
     GValue * value, GParamSpec * pspec);
 
+#if 0
 static GstCaps *gst_cv_filter2d_transform_caps (GstBaseTransform * trans,
     GstPadDirection dir, GstCaps * caps);
+#endif
 
 static GstFlowReturn gst_cv_filter2d_cv_transform (GstOpencvBaseTransform * filter,
     GstBuffer * buf, IplImage * img, GstBuffer * outbuf, IplImage * outimg);
@@ -212,7 +214,7 @@ gst_cv_filter2d_init (GstCvFilter2D * filter, GstCvFilter2DClass * gclass)
   va = g_value_array_new (DEFAULT_KERNEL_SIZE);
   g_value_init (&v, G_TYPE_DOUBLE);
   for (i = 0; i < DEFAULT_KERNEL_SIZE; i++) {
-    g_value_set_double (&v, horz[i]);
+    g_value_set_double (&v, vert[i]);
     g_value_array_append (va, &v);
   }
   g_value_unset (&v);
@@ -226,6 +228,7 @@ gst_cv_filter2d_init (GstCvFilter2D * filter, GstCvFilter2DClass * gclass)
   gst_base_transform_set_in_place (GST_BASE_TRANSFORM (filter), FALSE);
 }
 
+#if 0
 static GstCaps *
 gst_cv_filter2d_transform_caps (GstBaseTransform * trans, GstPadDirection dir,
     GstCaps * caps)
@@ -265,6 +268,7 @@ gst_cv_filter2d_transform_caps (GstBaseTransform * trans, GstPadDirection dir,
 
   return output;
 }
+#endif
 
 static void
 gst_cv_filter2d_set_property (GObject * object, guint prop_id,

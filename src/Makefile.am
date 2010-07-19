@@ -10,6 +10,7 @@ libgstopencv_la_SOURCES = gstopencv.c gstopencvbasetrans.c gstopencvutils.c
 # flags used to compile this facedetect
 # add other _CFLAGS and _LIBS as needed
 libgstopencv_la_CFLAGS = $(GST_CFLAGS) $(GST_BASE_CFLAGS) $(OPENCV_CFLAGS) \
+	$(GSTPB_BASE_CFLAGS) \
 								 -I${top_srcdir}/src \
 								 -I${top_srcdir}/src/basicfilters \
 								 -I${top_srcdir}/src/edgedetect \
