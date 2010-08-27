@@ -29,12 +29,10 @@ include_directories (AFTER
 add_definitions (-DHAVE_CONFIG_H)
 
 add_library (libgstopencv MODULE ${SOURCES} ${noinst_HEADERS})
-
 target_link_libraries (libgstopencv
-  general ${GLIB2_LIBRARIES}
-  general ${GSTREAMER_LIBRARIES}
-  general ${GSTREAMER_BASE_LIBRARY}
-  general ${OpenCV_LIBS}
+  ${GLIB2_LIBRARIES}
+  ${GSTREAMER_LIBRARIES}
+  ${OPENCV_LIBRARIES}
   general libgstbasicfilters
   general libgstedgedetect
   general libgstfaceblur
