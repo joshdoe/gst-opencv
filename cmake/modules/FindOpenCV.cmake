@@ -45,15 +45,15 @@
 #
 #----------------------------------------------------------
 
-message(STATUS "Check for OpenCV")
-
 # see if variables are in the cache
 if(OPENCV_INCLUDE_DIRS AND OPENCV_LIBRARIES)
   set(OpenCV_FIND_QUIETLY TRUE)
 endif(OPENCV_INCLUDE_DIRS AND OPENCV_LIBRARIES)
 
-# try and guess OPENCV_DIR
-find_path(OPENCV_DIR "OpenCVConfig.cmake" DOC "Root directory of OpenCV")
+file(TO_CMAKE_PATH "$ENV{OPENCV_DIR}" TRY1_DIR)
+file(TO_CMAKE_PATH "${OPENCV_DIR}" TRY2_DIR)
+file(GLOB OPENCV_DIR ${TRY1_DIR} ${TRY2_DIR})
+set(OPENCV_DIR ${OPENCV_DIR} CACHE STRING "Directory containing OpenCV")
 
 ##====================================================
 ## Find OpenCV libraries
@@ -80,8 +80,8 @@ if(EXISTS "${OPENCV_DIR}" OR PC_OPENCV_FOUND)
     include("${OPENCV_DIR}/OpenCVConfig.cmake")
 
     # conform variable names
-    set(OPENCV_FOUND ${OpenCV_FOUND})
-    set(OPENCV_LIBRARIES "${OpenCV_LIBS}")
+    #set(OPENCV_FOUND ${OpenCV_FOUND})
+    #set(OPENCV_LIBRARIES "${OpenCV_LIBS}")
     set(OPENCV_INCLUDE_DIRS "${OpenCV_INCLUDE_DIR}")
     set(OPENCV_VERSION ${OpenCV_VERSION})
 
@@ -106,10 +106,6 @@ if(EXISTS "${OPENCV_DIR}" OR PC_OPENCV_FOUND)
     set(OPENCV_VERSION ${OPENCV_VERSION_MAJOR}.${OPENCV_VERSION_MINOR}.${OPENCV_VERSION_PATCH} CACHE STRING "" FORCE)
     set(CVLIB_SUFFIX "${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}")
   endif(EXISTS "${OPENCV_DIR}/OpenCVConfig.cmake")
-
-  ## Initiate the variable before the loop
-  set(OPENCV_LIBRARIES "")
-  set(OPENCV_FOUND_TMP TRUE)
 
   ## Loop over each component to find debug/release versions
   foreach(__CVLIB ${OPENCV_LIB_COMPONENTS})
@@ -149,19 +145,13 @@ if(EXISTS "${OPENCV_DIR}" OR PC_OPENCV_FOUND)
     # only release
     elseif(OpenCV_${__CVLIB}_LIBRARY_RELEASE)
       set(OpenCV_${__CVLIB}_LIBRARY ${OpenCV_${__CVLIB}_LIBRARY_RELEASE}  CACHE STRING "" FORCE)
-    # no library found
-    else()
-      set(OPENCV_FOUND_TMP FALSE)
     endif()
-
-    # append library to list of libraries
-    if(OpenCV_${__CVLIB}_LIBRARY)
-      set(OPENCV_LIBRARIES ${OPENCV_LIBRARIES} ${OpenCV_${__CVLIB}_LIBRARY})
-    endif(OpenCV_${__CVLIB}_LIBRARY)
-
+	
+	mark_as_advanced(OpenCV_${__CVLIB}_LIBRARY OpenCV_${__CVLIB}_LIBRARY_DEBUG OpenCV_${__CVLIB}_LIBRARY_RELEASE)
+	
   endforeach(__CVLIB)
-
-  set(OPENCV_FOUND ${OPENCV_FOUND_TMP} CACHE BOOL "" FORCE)
+  
+  set(OPENCV_LIBRARIES ${OpenCV_cxcore_LIBRARY} ${OpenCV_cv_LIBRARY} ${OpenCV_ml_LIBRARY} ${OpenCV_highgui_LIBRARY} ${OpenCV_cvaux_LIBRARY} CACHE STRING "OpenCV libraries")
 
 else(EXISTS "${OPENCV_DIR}" OR PC_OPENCV_FOUND)
 
@@ -172,20 +162,5 @@ else(EXISTS "${OPENCV_DIR}" OR PC_OPENCV_FOUND)
 endif(EXISTS "${OPENCV_DIR}" OR PC_OPENCV_FOUND)
 ##====================================================
 
-
-##====================================================
-## Print message
-##----------------------------------------------------
-if(OPENCV_FOUND)
-  message(STATUS "Check for OpenCV: found")
-else(OPENCV_FOUND)
-  # make FIND_PACKAGE friendly
-  if(NOT OpenCV_FIND_QUIETLY)
-    if(OpenCV_FIND_REQUIRED)
-      message(FATAL_ERROR "OpenCV required but some headers or libs not found. ${ERR_MSG}")
-    else(OpenCV_FIND_REQUIRED)
-      message(STATUS "WARNING: OpenCV was not found. ${ERR_MSG}")
-    endif(OpenCV_FIND_REQUIRED)
-  endif(NOT OpenCV_FIND_QUIETLY)
-endif(OPENCV_FOUND)
-##====================================================
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(OpenCV DEFAULT_MSG OPENCV_INCLUDE_DIRS OpenCV_cxcore_LIBRARY OpenCV_cv_LIBRARY OpenCV_ml_LIBRARY OpenCV_highgui_LIBRARY OpenCV_cvaux_LIBRARY)
