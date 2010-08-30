@@ -83,6 +83,13 @@ else(NOT EXISTS "${GLIB2_DIR}")
   )
 endif(NOT EXISTS "${GLIB2_DIR}")
 
+# find glib-2.0 version from header file
+file(STRINGS ${Glib_glibconfig_2_INCLUDE_DIR}/glibconfig.h GLIB2_VERSIONS_TMP REGEX "^#define GLIB_[A-Z]+_VERSION[ \t]+[0-9]+$")
+string(REGEX REPLACE ".*#define GLIB_MAJOR_VERSION[ \t]+([0-9]+).*" "\\1" GLIB2_VERSION_MAJOR ${GLIB2_VERSIONS_TMP})
+string(REGEX REPLACE ".*#define GLIB_MINOR_VERSION[ \t]+([0-9]+).*" "\\1" GLIB2_VERSION_MINOR ${GLIB2_VERSIONS_TMP})
+string(REGEX REPLACE ".*#define GLIB_MICRO_VERSION[ \t]+([0-9]+).*" "\\1" GLIB2_VERSION_MICRO ${GLIB2_VERSIONS_TMP})
+set(GLIB2_VERSION ${GLIB2_VERSION_MAJOR}.${GLIB2_VERSION_MINOR}.${GLIB2_VERSION_MICRO} CACHE STRING "" FORCE)
+
 mark_as_advanced (Glib_glib_2_INCLUDE_DIR Glib_glibconfig_2_INCLUDE_DIR)
 mark_as_advanced (Glib_glib_2_LIBRARY Glib_gmodule_2_LIBRARY Glib_gobject_2_LIBRARY Glib_gthread_2_LIBRARY)
 
