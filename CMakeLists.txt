@@ -4,7 +4,8 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 project (gst-opencv)
 
-find_package (Gstreamer REQUIRED)
+set(GSTREAMER_DEBUG true)
+find_package (Gstreamer 0.10.29 REQUIRED core base)
 find_package (Glib2 REQUIRED)
 find_package (OpenCV REQUIRED)
 

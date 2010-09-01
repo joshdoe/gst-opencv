@@ -28,8 +28,8 @@ include_directories (AFTER
 
 add_definitions (-DHAVE_CONFIG_H)
 
-add_library (libgstopencv MODULE ${SOURCES} ${noinst_HEADERS})
-target_link_libraries (libgstopencv
+add_library (gstopencv MODULE ${SOURCES} ${noinst_HEADERS})
+target_link_libraries (gstopencv
   ${GLIB2_LIBRARIES}
   ${GSTREAMER_LIBRARIES}
   ${OPENCV_LIBRARIES}
@@ -41,6 +41,6 @@ target_link_libraries (libgstopencv
   general libgsttemplatematch
   general libgsttextwrite)
   
-install (TARGETS libgstopencv
+install (TARGETS gstopencv
   LIBRARY DESTINATION lib/gstreamer-0.10)
  
